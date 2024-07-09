@@ -12,3 +12,6 @@ config.log
 autobackup.json
 Makefile
 oshino
+/.vs
+/LANraragi-Plus/bin
+/LANraragi-Plus/obj
