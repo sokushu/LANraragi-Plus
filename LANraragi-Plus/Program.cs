@@ -19,6 +19,9 @@ namespace LANraragi_Plus
             builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             builder.Services.AddRazorPages();
+            builder.Services.AddAuthentication();
+            builder.Services.AddAuthorization();
+            builder.Services.AddControllers();
 
             var app = builder.Build();
 
@@ -35,13 +38,18 @@ namespace LANraragi_Plus
             }
 
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                ServeUnknownFileTypes = true
+            });
 
             app.UseRouting();
 
             app.UseAuthorization();
+			app.UseAuthentication();
 
-            app.MapRazorPages();
+			app.MapRazorPages();
+            app.MapControllers();
 
             app.Run();
         }

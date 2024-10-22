@@ -1,26 +1,91 @@
 ﻿@using Microsoft.AspNetCore.Identity
-@inject SignInManager<IdentityUser> SignInManager
-@inject UserManager<IdentityUser> UserManager
+@inject SignInManager<IdentityUser> SignInManager;
 
-<ul class="navbar-nav">
-@if (SignInManager.IsSignedIn(User))
-{
-    <li class="nav-item">
-        <a  class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity?.Name!</a>
-    </li>
-    <li class="nav-item">
-        <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })">
-            <button  type="submit" class="nav-link btn btn-link text-dark">Logout</button>
-        </form>
-    </li>
+@{
+    // 判断是否为登录用户
+    bool islogin = SignInManager.IsSignedIn(User);
+
+    // 判断是否为管理员登录
+    bool SuperAdministrator = islogin && User.IsInRole(RoleNames.SuperAdministrator);
+    bool Admin = islogin && User.IsInRole(RoleNames.Admin);
+    bool SiteEditor = islogin && User.IsInRole(RoleNames.SiteEditor);
+    bool UserLevel0 = islogin && User.IsInRole(RoleNames.UserLevel0);
+    bool UserLevel1 = islogin && User.IsInRole(RoleNames.UserLevel1);
+    bool UserLevel2 = islogin && User.IsInRole(RoleNames.UserLevel2);
+    bool VIPUser = islogin && User.IsInRole(RoleNames.VIPUser);
 }
-else
-{
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
-    </li>
-}
-</ul>
+
+<p id="nb">
+	<i class="fa fa-caret-right"></i>
+	<a href="/">首页</a>
+	<span style="margin-left:5px"></span>
+	@if (islogin && (SuperAdministrator || Admin || SiteEditor))
+	{
+		<i class="fa fa-caret-right"></i>
+		<a href="./upload">上传漫画</a>
+		<span style="margin-left:5px"></span>
+		<i class="fa fa-caret-right"></i>
+		<a href="./batch">批处理</a>
+		<span style="margin-left:5px"></span>
+		@if (SuperAdministrator)
+		{
+			<i class="fa fa-caret-right"></i>
+			<a href="./config">系统设置</a>
+			<span style="margin-left:5px"></span>
+			<i class="fa fa-caret-right"></i>
+			<a href="./logs">系统日志</a>
+			<span style="margin-left:5px"></span>
+		}
+		<i class="fa fa-caret-right"></i>
+		<a href="./config/categories">管理分类</a>
+		<span style="margin-left:5px"></span>
+		if (SuperAdministrator || Admin)
+		{
+			<i class="fa fa-caret-right"></i>
+			<a href="./stats">团队管理</a>
+			<span style="margin-left:5px"></span>
+		}
+		<i class="fa fa-caret-right"></i>
+		<a href="./upload">我的收藏</a>
+		<span style="margin-left:5px"></span>
+		<i class="fa fa-caret-right"></i>
+		<a href="./batch">我的消息</a>
+		<span style="margin-left:5px"></span>
+		<i class="fa fa-caret-right"></i>
+		<a href="./config">用户设置</a>
+		<span style="margin-left:5px"></span>
+		<i class="fa fa-caret-right"></i>
+		<a href="./stats">网站状态</a>
+		<span style="margin-left:5px"></span>
+		<i class="fa fa-caret-right"></i>
+		<a href="./logs">退出登录</a>
+	}
+	else if (islogin && (UserLevel0 || UserLevel1 || UserLevel2 || VIPUser))
+	{
+		<i class="fa fa-caret-right"></i>
+		<a href="./upload">我的收藏</a>
+		<span style="margin-left:5px"></span>
+		<i class="fa fa-caret-right"></i>
+		<a href="./batch">我的消息</a>
+		<span style="margin-left:5px"></span>
+		<i class="fa fa-caret-right"></i>
+		<a href="./config">用户设置</a>
+		<span style="margin-left:5px"></span>
+		<i class="fa fa-caret-right"></i>
+		<a href="./stats">网站状态</a>
+		<span style="margin-left:5px"></span>
+		<i class="fa fa-caret-right"></i>
+		<a href="./logs">退出登录</a>
+	}
+	else
+	{
+		<i class="fa fa-caret-right"></i>
+		<a href="/login">登录</a>
+		<span style="margin-left:5px"></span>
+		<i class="fa fa-caret-right"></i>
+		<a href="/login">注册</a>
+		<span style="margin-left:5px"></span>
+		<i class="fa fa-caret-right"></i>
+		<a href="/stats">网站状态</a>
+	}
+</p>

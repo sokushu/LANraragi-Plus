@@ -1,0 +1,46 @@
+﻿@page "/login"
+@model LANraragi_Plus.Pages.LoginModel
+@{
+}
+<div class='ido' style='text-align:center'>
+	<img src="/img/flubbed.gif" height="50%" style="border:double; margin: 20px;" />
+	<h1>请登录你的账号</h1>
+	<p><a href="/user/register">没有账号？ 注册一个</a></p>
+
+	<form name='loginForm' method='post'>
+		<table style='margin:auto; text-align:left; font-size:8pt;'>
+			<tbody>
+				<tr>
+					<td>用户名:</td>
+					<td>
+						<input asp-for="Username" >
+					</td>
+				</tr>
+				<tr>
+					<td>密 码:</td>
+					<td>
+						<input asp-for="Password" type="password">
+					</td>
+				</tr>
+				<tr>
+					<td style='padding-top:5px; text-align:center; vertical-align:middle;' colspan='2'>
+						<div style="margin:20px;">
+							<input class='stdbtn' type='submit' value='登录' style='width:70px'>
+						</div>
+						
+					</td>
+				</tr>
+
+				@if(Model.WrongPass)
+				{
+					<tr style='font-size:23px'>
+						<td colspan='2' style='padding-top:5px; color:orangered; text-align:center; vertical-align:middle '>
+							错误的用户名密码
+						</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	</form>
+
+</div>
